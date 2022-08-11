@@ -11,29 +11,34 @@ struct ContentView: View {
     
     @ObservedObject var viewModel: EmojiMemoryGame //connect with the signal that are publised in EmojiMemoryGame
     
+    @State var whichTheme = ""
+    
     var animalTheme: some View{
-            Button(action: {
-                viewModel.animalTheme()
+        Button( action: {
+            whichTheme = "animal"
+            viewModel.theme(EmojiMemoryGame.animals)
             }, label: {
                 Image(systemName: "pawprint.circle")
-            })
-        }
+            }).foregroundColor( (whichTheme == "animal") ? .green : .red )
+    }
 
     var vehicleTheme: some View{
             Button(action: {
-                viewModel.vehicleTheme()
+                whichTheme = "vehicle"
+                viewModel.theme(EmojiMemoryGame.vehicles)
             }, label: {
                 Image(systemName: "car.circle")
-            })
-        }
+            }).foregroundColor( (whichTheme == "vehicle") ? .green : .red )
+    }
 
     var foodTheme: some View{
             Button(action: {
-                viewModel.foodTheme()
+                whichTheme = "food"
+                viewModel.theme(EmojiMemoryGame.foods)
             }, label: {
                 Image(systemName: "fork.knife.circle")
-            })
-        }
+            }).foregroundColor( (whichTheme == "food") ? .green : .red )
+    }
     
     var body: some View {
         VStack{
@@ -41,13 +46,14 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]){
                     ForEach(viewModel.cards){card in
                         CardView(card: card)
-                            .aspectRatio(2/2.8,contentMode: .fit)
+                            .aspectRatio(2/3,contentMode: .fit)
                             .onTapGesture {
                                 viewModel.choose(card)
                             }
                     }
                 }
             }
+            
             
             HStack{
                 animalTheme
@@ -58,7 +64,6 @@ struct ContentView: View {
             }
             .font(.largeTitle)
             .padding()
-                            
         }
         .padding(.horizontal)
         .foregroundColor(.red)

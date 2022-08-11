@@ -15,7 +15,7 @@ class EmojiMemoryGame: ObservableObject { //ObservableObject is working thank to
     
     static let foods = ["🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍈","🍒","🍑","🥑","🍗","🍖","🌭","🍔","🍕","🌮","🫔","🥪","🥗"]
     
-    static var emojiArray = animals.shuffled()
+    static var emojiArray : Array<String> = [animals.shuffled(), vehicles.shuffled(), foods.shuffled()].randomElement()!
     
     static func createMemoryGame() -> MemoryGame<String> {
         MemoryGame<String>(numberOfPairsOfCards: 10) { pairIndex in EmojiMemoryGame.emojiArray[pairIndex]} //trailing closure
@@ -33,18 +33,8 @@ class EmojiMemoryGame: ObservableObject { //ObservableObject is working thank to
         model.choose(card)
     }
     
-    func animalTheme(){
-        EmojiMemoryGame.emojiArray = EmojiMemoryGame.animals.shuffled()
-        model = EmojiMemoryGame.createMemoryGame()
-    }
-    
-    func vehicleTheme(){
-        EmojiMemoryGame.emojiArray = EmojiMemoryGame.vehicles.shuffled()
-        model = EmojiMemoryGame.createMemoryGame()
-    }
-    
-    func foodTheme(){
-        EmojiMemoryGame.emojiArray = EmojiMemoryGame.foods.shuffled()
+    func theme(_ arr: Array<String>){
+        EmojiMemoryGame.emojiArray = arr.shuffled()
         model = EmojiMemoryGame.createMemoryGame()
     }
 }

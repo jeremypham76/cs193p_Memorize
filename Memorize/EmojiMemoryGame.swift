@@ -9,10 +9,16 @@ import SwiftUI
 
 class EmojiMemoryGame: ObservableObject { //ObservableObject is working thank to @Published model
     
-    static let emojis = ["🐶","🐹","🐼","🦊","🐯","🦁","🐵","🐮","🐷","🐰","🐔","🐧","🐥","🐴","🐝","🐙","🦑","🐬","🐡","🐠","🦈","🐋"]
+    static let animals = ["🐶","🐹","🐼","🦊","🐯","🦁","🐵","🐮","🐷","🐰","🐔","🐧","🐥","🐴","🐝","🐙","🦑","🐬","🐡","🐠","🦈","🐋"]
+    
+    static let vehicles = ["🚗","🚕","🚙","🚌","🚎","🏎","🚓","🚑","🚒","🚐","🛻","🚚","🚛","🚜","🚔","🚍","🛵","🛺","✈️","🚀","🛸","🚁"]
+    
+    static let foods = ["🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍈","🍒","🍑","🥑","🍗","🍖","🌭","🍔","🍕","🌮","🫔","🥪","🥗"]
+    
+    static var emojiArray = animals.shuffled()
     
     static func createMemoryGame() -> MemoryGame<String> {
-        MemoryGame<String>(numberOfPairsOfCards: 12) { pairIndex in EmojiMemoryGame.emojis[pairIndex]} //trailing closure
+        MemoryGame<String>(numberOfPairsOfCards: 10) { pairIndex in EmojiMemoryGame.emojiArray[pairIndex]} //trailing closure
     }
     
     @Published private var model: MemoryGame<String> =  EmojiMemoryGame.createMemoryGame()
@@ -25,5 +31,20 @@ class EmojiMemoryGame: ObservableObject { //ObservableObject is working thank to
     
     func choose(_ card: MemoryGame<String>.Card){
         model.choose(card)
+    }
+    
+    func animalTheme(){
+        EmojiMemoryGame.emojiArray = EmojiMemoryGame.animals.shuffled()
+        model = EmojiMemoryGame.createMemoryGame()
+    }
+    
+    func vehicleTheme(){
+        EmojiMemoryGame.emojiArray = EmojiMemoryGame.vehicles.shuffled()
+        model = EmojiMemoryGame.createMemoryGame()
+    }
+    
+    func foodTheme(){
+        EmojiMemoryGame.emojiArray = EmojiMemoryGame.foods.shuffled()
+        model = EmojiMemoryGame.createMemoryGame()
     }
 }

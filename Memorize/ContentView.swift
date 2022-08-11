@@ -11,6 +11,30 @@ struct ContentView: View {
     
     @ObservedObject var viewModel: EmojiMemoryGame //connect with the signal that are publised in EmojiMemoryGame
     
+    var animalTheme: some View{
+            Button(action: {
+                viewModel.animalTheme()
+            }, label: {
+                Image(systemName: "pawprint.circle")
+            })
+        }
+
+    var vehicleTheme: some View{
+            Button(action: {
+                viewModel.vehicleTheme()
+            }, label: {
+                Image(systemName: "car.circle")
+            })
+        }
+
+    var foodTheme: some View{
+            Button(action: {
+                viewModel.foodTheme()
+            }, label: {
+                Image(systemName: "fork.knife.circle")
+            })
+        }
+    
     var body: some View {
         VStack{
             ScrollView{
@@ -24,11 +48,23 @@ struct ContentView: View {
                     }
                 }
             }
+            
+            HStack{
+                animalTheme
+                Spacer()
+                vehicleTheme
+                Spacer()
+                foodTheme
+            }
+            .font(.largeTitle)
+            .padding()
+                            
         }
         .padding(.horizontal)
         .foregroundColor(.red)
     }
 }
+
 
 struct CardView: View {
     let card: MemoryGame<String>.Card

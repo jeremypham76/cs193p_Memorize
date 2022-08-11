@@ -9,119 +9,48 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var emojis = ["🐶","🐹","🐼","🦊","🐯","🦁","🐵","🐮","🐷","🐰","🐔","🐧","🐥","🐴","🐝","🐙","🦑","🐬","🐡","🐠","🦈","🐋"]
-    
-    
-    @State var emojiCount = 8
-    
+    @ObservedObject var viewModel: EmojiMemoryGame //connect with the signal that are publised in EmojiMemoryGame
     
     var body: some View {
         VStack{
-            
-            Text("Memorize !!!")
-                .font(.largeTitle)
-                .foregroundColor(.black)
-            
-            
             ScrollView{
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]){
-                    ForEach(emojis[0..<emojiCount], id: \.self){emoji in
-                        CardView(content: emoji)
+                    ForEach(viewModel.cards){card in
+                        CardView(card: card)
                             .aspectRatio(2/2.8,contentMode: .fit)
+                            .onTapGesture {
+                                viewModel.choose(card)
+                            }
                     }
                 }
             }
-            
-            HStack{
-                remove
-                Spacer()
-                animalTheme
-                vehicleTheme
-                foodTheme
-                Spacer()
-                add
-            }
-            .font(.largeTitle)
-            .padding()
-            
         }
         .padding(.horizontal)
         .foregroundColor(.red)
     }
-    
-    var animalTheme: some View{
-        Button(action: {
-            let animals = ["🐶","🐹","🐼","🦊","🐯","🦁","🐵","🐮","🐷","🐰","🐔","🐧","🐥","🐴","🐝","🐙","🦑","🐬","🐡","🐠","🦈","🐋"]
-            emojis = animals.shuffled()
-        }, label: {
-            Image(systemName: "pawprint.circle")
-        })
-    }
-    
-    var vehicleTheme: some View{
-        Button(action: {
-            let vehicles = ["🚗","🚕","🚙","🚌","🚎","🏎","🚓","🚑","🚒","🚐","🛻","🚚","🚛","🚜","🚔","🚍","🛵","🏍","🛺","✈️","🚀","🛸","🚁"]
-            emojis = vehicles.shuffled()
-        }, label: {
-            Image(systemName: "car.circle")
-        })
-    }
-    
-    var foodTheme: some View{
-        Button(action: {
-            let foods = ["🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🍗","🍖","🌭","🍔","🍕","🌮","🫔","🥪","🥗"]
-            emojis = foods.shuffled()
-        }, label: {
-            Image(systemName: "fork.knife.circle")
-        })
-    }
-    
-    var remove: some View{
-        Button(action: {
-            if emojiCount > 1 {
-                emojiCount -= 1
-            }
-        }, label: {
-            Image(systemName: "minus.square")
-        })
-    }
-    
-    
-    var add: some View{
-        Button(action: {
-            if emojiCount < emojis.count{
-                emojiCount += 1
-            }
-        }, label: {
-            Image(systemName: "plus.square")
-        })
-    }
 }
 
 struct CardView: View {
-    var content: String
-    @State var isFaceUp: Bool = true
+    let card: MemoryGame<String>.Card
     
     var body: some View {
         ZStack{
             let shape = RoundedRectangle(cornerRadius: 20)
-            if isFaceUp {
+            if card.isFaceUp {
                 shape
                     .fill()
                     .foregroundColor(.white)
                 shape
                     .strokeBorder(lineWidth: 3)
-                Text(content)
+                Text(card.content)
                     .font(.largeTitle)
+            } else if card.isMatched {
+                shape.opacity(0)
             } else {
-                RoundedRectangle(cornerRadius: 20)
+                shape
                     .fill()
             }
         }
-        .onTapGesture {
-            isFaceUp = !isFaceUp
-        }
-        
     }
 }
 
@@ -133,7 +62,8 @@ struct CardView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        let game = EmojiMemoryGame()
+        ContentView(viewModel: game)
             .previewDevice("iPhone 13 Pro Max")
             .preferredColorScheme(.dark)
     }

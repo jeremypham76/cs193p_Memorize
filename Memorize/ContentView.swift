@@ -13,31 +13,42 @@ struct ContentView: View {
     
     @State var whichTheme = ""
     
+    var newGame: some View{
+        Button( action: {
+            viewModel.shuffledata()
+            viewModel.theme(EmojiMemoryGame.emojiArray)
+            
+            print(viewModel.checkTheme())
+            
+            }, label: {
+                VStack{
+                    Text("New")
+                    Text("Game")}.font(.title)
+            })
+    }
+    
     var animalTheme: some View{
         Button( action: {
-            whichTheme = "animal"
             viewModel.theme(EmojiMemoryGame.animals)
             }, label: {
                 Image(systemName: "pawprint.circle")
-            }).foregroundColor( (whichTheme == "animal") ? .green : .red )
+            }).foregroundColor( (viewModel.currentTheme == "animal") ? .green : .red )
     }
 
     var vehicleTheme: some View{
             Button(action: {
-                whichTheme = "vehicle"
                 viewModel.theme(EmojiMemoryGame.vehicles)
             }, label: {
                 Image(systemName: "car.circle")
-            }).foregroundColor( (whichTheme == "vehicle") ? .green : .red )
+            }).foregroundColor( (viewModel.currentTheme == "vehicle") ? .green : .red )
     }
 
     var foodTheme: some View{
             Button(action: {
-                whichTheme = "food"
                 viewModel.theme(EmojiMemoryGame.foods)
             }, label: {
                 Image(systemName: "fork.knife.circle")
-            }).foregroundColor( (whichTheme == "food") ? .green : .red )
+            }).foregroundColor( (viewModel.currentTheme == "food") ? .green : .red )
     }
     
     var body: some View {
@@ -56,6 +67,8 @@ struct ContentView: View {
             
             
             HStack{
+                newGame
+                Spacer()
                 animalTheme
                 Spacer()
                 vehicleTheme
@@ -64,6 +77,7 @@ struct ContentView: View {
             }
             .font(.largeTitle)
             .padding()
+            
         }
         .padding(.horizontal)
         .foregroundColor(.red)

@@ -17,6 +17,7 @@ class EmojiMemoryGame: ObservableObject { //ObservableObject is working thank to
     
     static var emojiArray : Array<String> = [animals.shuffled(), vehicles.shuffled(), foods.shuffled()].randomElement()!
     
+    
     static func createMemoryGame() -> MemoryGame<String> {
         MemoryGame<String>(numberOfPairsOfCards: 10) { pairIndex in EmojiMemoryGame.emojiArray[pairIndex]} //trailing closure
     }
@@ -27,6 +28,21 @@ class EmojiMemoryGame: ObservableObject { //ObservableObject is working thank to
         return model.cards
     }
     
+    var currentTheme : String {
+        if (EmojiMemoryGame.animals.contains(EmojiMemoryGame.emojiArray[0])){
+            return "animal"
+        }
+        else if (EmojiMemoryGame.vehicles.contains(EmojiMemoryGame.emojiArray[0])){
+            return "vehicle"
+        }
+        else if (EmojiMemoryGame.foods.contains(EmojiMemoryGame.emojiArray[0])){
+            return "food"
+        }
+        else{
+            return ""}
+    }
+    
+    
     // MARK : - Intent(s)
     
     func choose(_ card: MemoryGame<String>.Card){
@@ -36,5 +52,13 @@ class EmojiMemoryGame: ObservableObject { //ObservableObject is working thank to
     func theme(_ arr: Array<String>){
         EmojiMemoryGame.emojiArray = arr.shuffled()
         model = EmojiMemoryGame.createMemoryGame()
+    }
+    
+    func shuffledata(){
+        EmojiMemoryGame.emojiArray = [EmojiMemoryGame.animals.shuffled(), EmojiMemoryGame.vehicles.shuffled(), EmojiMemoryGame.foods.shuffled()].randomElement()!
+    }
+    
+    func checkTheme() -> Array<String>{
+        return EmojiMemoryGame.emojiArray
     }
 }
